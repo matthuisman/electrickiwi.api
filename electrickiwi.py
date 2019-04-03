@@ -88,6 +88,15 @@ class ElectricKiwi(object):
 
         return data['data']
 
+    def _get_token(self, endpoint):
+        length = random.randint(10, len(self._secret) - 2)
+        secret = self._secret[:length]
+
+        data = endpoint + '|' + str(int(time.time())+30) + '|' + ''.join(random.choice('0123456789ABCDEF') for i in range(16))
+        encrypted = encrypt(data.encode(), secret.encode()).decode()
+
+        return encrypted[:self._secret_position] + str(length) + encrypted[self._secret_position:]
+
     def get_hours(self):
         data = self.request('/hop/')
 
@@ -102,31 +111,41 @@ class ElectricKiwi(object):
     def _require_login(self):
         if not self._sid:
             raise ElectricException('You need to login first')
-    
-    def set_hop_hour(self, hour):
+
+    def consumption(self, start_date=None, end_date=None):
         self._require_login()
 
-        print('Setting hour to: {}'.format(hour))
+        start_date = start_date or arrow.now().shift(days=-9)
+        end_date   = end_date   or start_date.shift(days=7)
 
-        data = self.request('/hop/{customer_id}/{connection_id}/'.format(customer_id=self._customer['id'], connection_id=self._customer['connection']['id']), params={'start': hour.interval}, type='POST')
-        
-        return Hour(data['start']['interval'], data['start']['start_time'], data['end']['end_time'], 1)
+        data = self.request('/consumption/averages/{customer_id}/{connection_id}/?start_date={start_date}&end_date={end_date}&group_by=day'
+                .format(customer_id=self._customer['id'], connection_id=self._customer['connection']['id'], start_date=start_date.format('YYYY-MM-DD'), end_date=end_date.format('YYYY-MM-DD')))
 
+        return data['usage']
+
+    def running_balance(self):
+        self._require_login()
+
+        data = self.request('/account/running_balance/{customer_id}/'.format(customer_id=self._customer['id']))
+        return data
+
+    def connection_details(self):
+        self._require_login()
+
+        data = self.request('/connection/details/{customer_id}/{connection_id}/'.format(customer_id=self._customer['id'], connection_id=self._customer['connection']['id']))
+        return data
+    
     def get_hop_hour(self):
         self._require_login()
 
         data = self.request('/hop/{customer_id}/{connection_id}/'.format(customer_id=self._customer['id'], connection_id=self._customer['connection']['id']))
-
         return Hour(data['start']['interval'], data['start']['start_time'], data['end']['end_time'], 1)
 
-    def _get_token(self, endpoint):
-        length = random.randint(10, len(self._secret) - 2)
-        secret = self._secret[:length]
+    def set_hop_hour(self, hour):
+        self._require_login()
 
-        data = endpoint + '|' + str(int(time.time())+30) + '|' + ''.join(random.choice('0123456789ABCDEF') for i in range(16))
-        encrypted = encrypt(data.encode(), secret.encode()).decode()
-
-        return encrypted[:self._secret_position] + str(length) + encrypted[self._secret_position:]
+        data = self.request('/hop/{customer_id}/{connection_id}/'.format(customer_id=self._customer['id'], connection_id=self._customer['connection']['id']), params={'start': hour.interval}, type='POST')
+        return Hour(data['start']['interval'], data['start']['start_time'], data['end']['end_time'], 1)
 
 if __name__ == '__main__':
     ek       = ElectricKiwi()
@@ -136,6 +155,9 @@ if __name__ == '__main__':
     password = input('Password: ')
 
     customer = ek.login(email, ek.password_hash(password))
+
+    consumption = ek.consumption()
+    print(consumption)
 
     hours = ek.get_hours()
     print(hours)
