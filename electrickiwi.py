@@ -4,6 +4,7 @@ import time
 import arrow
 
 from hashlib import md5
+from collections import OrderedDict
 
 from crypotJS import encrypt
 
@@ -97,13 +98,17 @@ class ElectricKiwi(object):
 
         return encrypted[:self._secret_position] + str(length) + encrypted[self._secret_position:]
 
-    def get_hours(self):
+    def get_hours(self, hop_only=False):
         data = self.request('/hop/')
 
         hours = {}
+        for interval in sorted(data['intervals'].keys(), key=lambda x: int(x)):
+            row = data['intervals'][interval]
 
-        for interval, data in data['intervals'].items():
-            hour = Hour(interval, data['start_time'], data['end_time'], data['active'])
+            if hop_only and not row['active']:
+                continue
+
+            hour = Hour(interval, row['start_time'], row['end_time'], row['active'])
             hours[hour.interval] = hour
 
         return hours
@@ -143,8 +148,8 @@ class ElectricKiwi(object):
 
     def set_hop_hour(self, hour):
         self._require_login()
-
-        data = self.request('/hop/{customer_id}/{connection_id}/'.format(customer_id=self._customer['id'], connection_id=self._customer['connection']['id']), params={'start': hour.interval}, type='POST')
+        interval = hour.interval if type(hour) == Hour else int(hour)
+        data = self.request('/hop/{customer_id}/{connection_id}/'.format(customer_id=self._customer['id'], connection_id=self._customer['connection']['id']), params={'start': interval}, type='POST')
         return Hour(data['start']['interval'], data['start']['start_time'], data['end']['end_time'], 1)
 
 if __name__ == '__main__':
