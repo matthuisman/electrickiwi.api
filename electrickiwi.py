@@ -5,7 +5,7 @@ import arrow
 
 from hashlib import md5
 
-from crypotJS import encrypt
+from cryptoJS import encrypt
 
 class Hour(object):
     def __init__(self, interval, start, end, hop_allow=0):
