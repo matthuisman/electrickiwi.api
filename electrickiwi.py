@@ -4,6 +4,7 @@ import time
 import arrow
 
 from hashlib import md5
+from decimal import Decimal
 
 from cryptoJS import encrypt
 
@@ -157,17 +158,44 @@ if __name__ == '__main__':
 
     email    = input('Email: ')
     password = input('Password: ')
-
     customer = ek.login(email, ek.password_hash(password))
 
-    consumption = ek.consumption()
-    print(consumption)
+    connection = ek.connection_details()
+    kwh_cost   = Decimal(connection['pricing_plan']['usage_rate_inc_gst'])
 
-    hours = ek.get_hours()
-    print(hours)
+    hop_hours = ek.get_hours(hop_only=True)
+    wrong_kwh = Decimal('0.0')
 
-    hour = ek.get_hop_hour()
-    print('Current hour: {}'.format(hour))
+    print("")
+    consumption = ek.consumption(arrow.now().shift(days=-2).shift(months=-1), arrow.now())
+    for date in consumption:
+        data = consumption[date]
 
-    new_hour = ek.set_hop_hour(hours[33])
-    print('New hour: {}'.format(new_hour))
+        hop_usage = Decimal(data['consumption_adjustment'])
+        hop_best  = Decimal('0.0')
+
+        for interval in range(1, 24*2):
+            interval_data = data['intervals'][str(interval)]
+            if interval_data['hop_best']:
+                hop_best = Decimal(interval_data['consumption']) + Decimal(data['intervals'][str(interval+1)]['consumption'])
+                break
+
+        date = arrow.get(date, 'YYYY-MM-DD').format('DD/MM/YYYY')
+
+        diff = hop_best - hop_usage
+        if diff > 0.01:
+            wrong_kwh += diff
+            print('{} - Wrong: {}kWh vs {}kWh ({}kWh)'.format(date, hop_best, hop_usage, diff))
+        else:
+            print('{} - Correct: {}kWh'.format(date, hop_usage))
+
+    print('\nTotal Wrong: {}kWh (${})'.format(wrong_kwh, round(wrong_kwh * kwh_cost, 2)))
+
+    # hours = ek.get_hours()
+    # print(hours)
+
+    # hour = ek.get_hop_hour()
+    # print('Current hour: {}'.format(hour))
+
+    # new_hour = ek.set_hop_hour(hours[33])
+    # print('New hour: {}'.format(new_hour))
