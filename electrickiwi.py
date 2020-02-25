@@ -162,9 +162,7 @@ if __name__ == '__main__':
 
     connection = ek.connection_details()
     kwh_cost   = Decimal(connection['pricing_plan']['usage_rate_inc_gst'])
-
-    hop_hours = ek.get_hours(hop_only=True)
-    wrong_kwh = Decimal('0.0')
+    wrong_kwh  = Decimal('0.0')
 
     print("")
     consumption = ek.consumption(arrow.now().shift(days=-2).shift(months=-1), arrow.now())
