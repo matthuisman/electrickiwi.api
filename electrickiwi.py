@@ -162,7 +162,8 @@ if __name__ == '__main__':
 
     connection = ek.connection_details()
     kwh_cost   = Decimal(connection['pricing_plan']['usage_rate_inc_gst'])
-    wrong_kwh  = Decimal('0.0')
+    wrong_kwh  = []
+    hop_savings = Decimal('0.0')
 
     print("")
     consumption = ek.consumption(arrow.now().shift(days=-2).shift(months=-1), arrow.now())
@@ -170,7 +171,7 @@ if __name__ == '__main__':
         data = consumption[date]
 
         hop_usage = Decimal(data['consumption_adjustment'])
-        hop_best  = Decimal('0.0')
+        hop_savings += hop_usage
 
         for interval in range(1, 24*2):
             interval_data = data['intervals'][str(interval)]
@@ -182,12 +183,14 @@ if __name__ == '__main__':
 
         diff = hop_best - hop_usage
         if diff > 0.01:
-            wrong_kwh += diff
-            print('{} - Wrong: {}kWh vs {}kWh ({}kWh)'.format(date, hop_best, hop_usage, diff))
+            wrong_kwh.append(diff)
+            print('{} - Wrong HOP: {}kWh vs {}kWh ({}kWh)'.format(date, hop_best, hop_usage, diff))
         else:
-            print('{} - Correct: {}kWh'.format(date, hop_usage))
+            print('{} - Correct HOP: {}kWh'.format(date, hop_usage))
 
-    print('\nTotal Wrong: {}kWh (${})'.format(wrong_kwh, round(wrong_kwh * kwh_cost, 2)))
+    print('\nHOP Savings: {}kWh (${})'.format(hop_savings, round(hop_savings * kwh_cost, 2)))
+    print('Missed HOP: {}kWh (${})'.format(sum(wrong_kwh), round(sum(wrong_kwh) * kwh_cost, 2)))
+    print('HOP Score: {}%'.format( round(100 - (len(wrong_kwh) / len(consumption)) * 100 ), 2))
 
     # hours = ek.get_hours()
     # print(hours)
