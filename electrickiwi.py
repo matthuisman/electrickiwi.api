@@ -160,9 +160,9 @@ if __name__ == '__main__':
     password = input('Password: ')
     customer = ek.login(email, ek.password_hash(password))
 
-    connection = ek.connection_details()
-    kwh_cost   = Decimal(connection['pricing_plan']['usage_rate_inc_gst'])
-    wrong_kwh  = []
+    connection  = ek.connection_details()
+    kwh_cost    = Decimal(connection['pricing_plan']['usage_rate_inc_gst'])
+    wrong_kwh   = Decimal('0.0')
     hop_savings = Decimal('0.0')
 
     print("")
@@ -183,14 +183,14 @@ if __name__ == '__main__':
 
         diff = hop_best - hop_usage
         if diff > 0.01:
-            wrong_kwh.append(diff)
+            wrong_kwh += diff
             print('{} - Wrong HOP: {}kWh vs {}kWh ({}kWh)'.format(date, hop_best, hop_usage, diff))
         else:
             print('{} - Correct HOP: {}kWh'.format(date, hop_usage))
 
-    print('\nHOP Savings: {}kWh (${})'.format(hop_savings, round(hop_savings * kwh_cost, 2)))
-    print('Missed HOP: {}kWh (${})'.format(sum(wrong_kwh), round(sum(wrong_kwh) * kwh_cost, 2)))
-    print('HOP Score: {}%'.format( round(100 - (len(wrong_kwh) / len(consumption)) * 100 ), 2))
+    print('\nHOP Savings: {}kWh (${:.2f})'.format(hop_savings, hop_savings * kwh_cost))
+    print('Missed HOP: {}kWh (${:.2f})'.format(wrong_kwh, wrong_kwh * kwh_cost))
+    print('HOP Score: {:.2f}%'.format(Decimal(100.0) - ((wrong_kwh / hop_savings) * 100)))
 
     # hours = ek.get_hours()
     # print(hours)
