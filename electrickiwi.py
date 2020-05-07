@@ -152,7 +152,6 @@ class ElectricKiwi(object):
         data = self.request('/hop/{customer_id}/{connection_id}/'.format(customer_id=self._customer['id'], connection_id=self._customer['connection']['id']), params={'start': interval}, type='POST')
         return Hour(data['start']['interval'], data['start']['start_time'], data['end']['end_time'], 1)
 
-
 def hop_score():
     ek       = ElectricKiwi()
     token    = ek.at_token()
@@ -161,7 +160,7 @@ def hop_score():
         with open('ek_creds.txt') as f:
             email    = f.readline().strip()
             password = f.readline().strip()
-            
+
         print("Loaded credentials OK")
     except:
         email    = input('EK Email: ')
