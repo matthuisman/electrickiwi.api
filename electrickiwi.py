@@ -156,17 +156,24 @@ def hop_score():
     ek       = ElectricKiwi()
     token    = ek.at_token()
 
+    loaded = False
     try:
         with open('ek_creds.txt') as f:
             email    = f.readline().strip()
             password = f.readline().strip()
 
-        print("Loaded credentials OK")
+        loaded = True
+        print("Loaded Credentials: OK")
     except:
         email    = input('EK Email: ')
-        password = input('EK Password: ')
+        password = ek.password_hash(input('EK Password: '))
+    
+    customer = ek.login(email, password)
+    print('Logged in: OK')
 
-    customer = ek.login(email, ek.password_hash(password))
+    if not loaded and input('Save credentials? Y/N : ').lower() in ('y', 'yes'):
+        with open('ek_creds.txt', 'w') as f:
+            f.write(email+'\n'+password)
 
     connection  = ek.connection_details()
     kwh_cost    = Decimal(connection['pricing_plan']['usage_rate_inc_gst'])
