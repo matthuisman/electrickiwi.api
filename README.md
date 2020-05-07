@@ -5,7 +5,7 @@ git clone https://github.com/matthuisman/electrickiwi.api.git
 cd electrickiwi.api
 python electrickiwi.py
 ```
-or download the exe
+or download the exe  
 https://github.com/matthuisman/electrickiwi.api/raw/master/electrickiwi.exe
 
 You can save your email / password in a file called ek_creds.txt in the same folder as the code / executable.  
