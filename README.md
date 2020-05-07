@@ -8,11 +8,6 @@ python electrickiwi.py
 or download the exe  
 https://github.com/matthuisman/electrickiwi.api/raw/master/electrickiwi.exe
 
-You can save your email / password in a file called ek_creds.txt in the same folder as the code / executable.  
-It needs to be saved with email address on first line and then password on second line.
-
-**ek_creds.txt**
-```
-my_ek_email@example.com
-my_ek_password
-```
+Once you login, it will offer to save your credentials.  
+If you respond with 'y' or 'yes' - it will save your login email addres and a md5 hash of your password to a file called ek_creds.txt in the current directory.  
+Next time you run the script, it will load your credentials from this file.
