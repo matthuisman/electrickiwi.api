@@ -152,7 +152,8 @@ class ElectricKiwi(object):
         data = self.request('/hop/{customer_id}/{connection_id}/'.format(customer_id=self._customer['id'], connection_id=self._customer['connection']['id']), params={'start': interval}, type='POST')
         return Hour(data['start']['interval'], data['start']['start_time'], data['end']['end_time'], 1)
 
-if __name__ == '__main__':
+
+def hop_score():
     ek       = ElectricKiwi()
     token    = ek.at_token()
 
@@ -160,6 +161,8 @@ if __name__ == '__main__':
         with open('ek_creds.txt') as f:
             email    = f.readline().strip()
             password = f.readline().strip()
+            
+        print("Loaded credentials OK")
     except:
         email    = input('EK Email: ')
         password = input('EK Password: ')
@@ -198,14 +201,10 @@ if __name__ == '__main__':
     print('Missed HOP: {}kWh (${:.2f})'.format(wrong_kwh, wrong_kwh * kwh_cost))
     print('HOP Score: {:.2f}%'.format(Decimal(100.0) - ((wrong_kwh / hop_savings) * 100)))
 
-    # Python 3
+if __name__ == '__main__':
+    try:
+        hop_score()
+    except Exception as e:
+        print(e)
+
     input('\nPress any key to exit')
-
-    # hours = ek.get_hours()
-    # print(hours)
-
-    # hour = ek.get_hop_hour()
-    # print('Current hour: {}'.format(hour))
-
-    # new_hour = ek.set_hop_hour(hours[33])
-    # print('New hour: {}'.format(new_hour))
