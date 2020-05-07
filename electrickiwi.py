@@ -156,8 +156,8 @@ if __name__ == '__main__':
     ek       = ElectricKiwi()
     token    = ek.at_token()
 
-    email    = input('Email: ')
-    password = input('Password: ')
+    email    = input('EK Email: ')
+    password = input('EK Password: ')
     customer = ek.login(email, ek.password_hash(password))
 
     connection  = ek.connection_details()
@@ -191,6 +191,9 @@ if __name__ == '__main__':
     print('\nHOP Savings: {}kWh (${:.2f})'.format(hop_savings, hop_savings * kwh_cost))
     print('Missed HOP: {}kWh (${:.2f})'.format(wrong_kwh, wrong_kwh * kwh_cost))
     print('HOP Score: {:.2f}%'.format(Decimal(100.0) - ((wrong_kwh / hop_savings) * 100)))
+
+    # Python 3
+    input('\nPress any key to exit')
 
     # hours = ek.get_hours()
     # print(hours)
