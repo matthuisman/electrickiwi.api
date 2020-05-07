@@ -156,8 +156,14 @@ if __name__ == '__main__':
     ek       = ElectricKiwi()
     token    = ek.at_token()
 
-    email    = input('EK Email: ')
-    password = input('EK Password: ')
+    try:
+        with open('ek_creds.txt') as f:
+            email    = f.readline().strip()
+            password = f.readline().strip()
+    except:
+        email    = input('EK Email: ')
+        password = input('EK Password: ')
+
     customer = ek.login(email, ek.password_hash(password))
 
     connection  = ek.connection_details()
