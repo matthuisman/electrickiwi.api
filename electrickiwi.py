@@ -176,6 +176,7 @@ def hop_score():
             f.write(email+'\n'+password)
 
     connection  = ek.connection_details()
+
     kwh_cost    = Decimal(connection['pricing_plan']['usage_rate_inc_gst'])
     wrong_kwh   = Decimal('0.0')
     hop_savings = Decimal('0.0')
@@ -214,3 +215,54 @@ if __name__ == '__main__':
         print(e)
 
     input('\nPress any key to exit')
+
+
+# login: { key: 'login', endpoint: '/login/', method: 'post' },
+# logout: { key: 'logout', endpoint: '/logout/{customerId}/', method: 'post' },
+# connection_details: { key: 'connection_details', endpoint: '/connection/details/{customerId}/{connectionId}/', method: 'get' },
+# hop: { key: 'hop', endpoint: '/hop/', method: 'get', preload: true },
+# hop_customerid: { key: 'hop_customerid', endpoint: '/hop/{customerId}/', method: 'get' },
+# hop_customerid_connectionid: { key: 'hop_customerid_connectionid', endpoint: '/hop/{customerId}/{connectionId}/', method: 'get', preload: true },
+# update_hop_customerid_connectionid: { key: 'update_hop_customerid_connectionid', endpoint: '/hop/{customerId}/{connectionId}/', method: 'post' },
+# lang: { key: 'lang', endpoint: '/language/{lang}/', method: 'get' },
+# language: { key: 'language', endpoint: '/service/language/', method: 'get' },
+# get_bill_alert: { key: 'get_bill_alert', endpoint: '/subscription/bill_alert/{customerId}/{connectionId}/', method: 'get' },
+# forgot_password: { key: 'forgot_password', endpoint: '/password/forgot/', method: 'post' },
+# key_submission: { key: 'key_submission', endpoint: '/password/forgot/otp/', method: 'post' },
+# update_password: { key: 'update_password', endpoint: '/password/forgot/{respartnerId}/{otp}/', method: 'post' },
+# update_bill_alert: { key: 'update_bill_alert', endpoint: '/subscription/bill_alert/{customerId}/{connectionId}/', method: 'post' },
+# unsubscribe_bill_alert: { key: 'unsubscribe_bill_alert', endpoint: '/subscription/bill_alert/unsubscribe/{customerId}/{connectionId}/', method: 'get' },
+# get_customer_bills: { key: 'get_customer_bills', endpoint: '/billing/bills/{customerId}/', method: 'get' },
+# get_your_details: { key: 'get_your_details', endpoint: '/customer/{customerId}/', method: 'get', preload: true },
+# post_your_details: { key: 'post_your_details', endpoint: '/customer/{customerId}/', method: 'post' },
+# get_message_details: { key: 'get_message_details', endpoint: '/messaging/message/{customerId}/{messageId}/', method: 'get' },
+# get_messages: { key: 'get_messages', endpoint: '/messaging/messages/{customerId}/', method: 'get' },
+# post_messages: { key: 'post_messages', endpoint: '/messaging/messages/{customerId}/', method: 'post' },
+# get_billing_details: { key: 'get_billing_details', endpoint: '/billing/details/{customerId}/', method: 'get', preload: true },
+# account_payment_url: { key: 'account_payment_url', endpoint: '/payment/url/{customerId}/', method: 'post' },
+# get_billing_frequency: { key: 'get_billing_frequency', endpoint: '/billing/frequency/{customerId}/', method: 'get', preload: true },
+# update_billing_frequency: { key: 'update_billing_frequency', endpoint: '/billing/frequency/{customerId}/', method: 'post' },
+# account_running_balance: { key: 'account_running_balance', endpoint: '/account/running_balance/{customerId}/', method: 'get' },
+# account_status: { key: 'account_status', endpoint: '/account/status/{customerId}/', method: 'get', preload: true },
+# get_connection_details: { key: 'get_connection_details', endpoint: '/connection/details/{customerId}/{connectionId}/', method: 'get' },
+# move_connection: { key: 'move_connection', endpoint: '/connection/move/{customerId}/', method: 'post' },
+# moving_house_config: { key: 'moving_house_config', endpoint: '/service/moving_house/config/', method: 'get' },
+# get_stay_ahead: { key: 'get_stay_ahead', endpoint: '/subscription/stay_ahead/{customerId}/', method: 'get', preload: true },
+# update_stay_ahead: { key: 'update_stay_ahead', endpoint: '/subscription/stay_ahead/{customerId}/', method: 'post' },
+# unsubscribe_stay_ahead: { key: 'unsubscribe_stay_ahead', endpoint: '/subscription/stay_ahead/unsubscribe/{customerId}/', method: 'get' },
+# get_consumption_summary: { key: 'get_consumption_summary', endpoint: '/consumption/summary/{customerId}/{connectionId}/', method: 'get' },
+# get_consumption: { key: 'get_consumption', endpoint: '/consumption/{customerId}/{connectionId}/', method: 'get' },
+# outage_contact_details: { key: 'outageContact_details', endpoint: '/service/outage/contact/{connectionId}/', method: 'get' },
+# refer_a_friend: { key: 'refer_a_friend', endpoint: '/refer_a_friend/{customerId}/', method: 'get' },
+# get_savings: { key: 'get_savings', endpoint: '/savings/{customerId}/', method: 'get' },
+# get_credits: { key: 'get_credits', endpoint: '/credits/{customerId}/', method: 'get' },
+# get_replies: { key: 'get_replies', endpoint: '/messaging/replies/{customerId}/{messageId}/', method: 'get' },
+# get_product_notifications: { key: 'get_product_notifications', endpoint: '/notifications/{customerId}/', method: 'get' },
+# get_product_notification_details: { key: 'get_product_notification_details', endpoint: '/notification/{customerId}/{notificationProductId}/', method: 'get' },
+# update_product_notifications: { key: 'update_product_notifications', endpoint: '/notification/{customerId}/{notificationProductId}/', method: 'post' },
+# update_device_details: { key: 'update_device_details', endpoint: '/device/register/{customerId}/', method: 'post' },
+# email_checker: { key: 'email_checker', endpoint: '/service/email_checker/', method: 'post' },
+# products: { key: 'products', endpoint: '/service/products/', method: 'get' },
+# client_config: { key: 'client_config', endpoint: '/service/client/config/', method: 'get' },
+# consumption_averages: { key: 'consumption_averages', endpoint: '/consumption/averages/{customerId}/{connectionId}/', method: 'get' },
+# contact_reasons: { key: 'contact_reasons', endpoint: '/service/contact_reasons/', method: 'get' },
