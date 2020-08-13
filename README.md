@@ -1,5 +1,11 @@
 # electrickiwi.api
 
+Sign-up to ElectricKiwi using the below link and we both get $50 off our power bills (win/win)  
+**https://www.electrickiwi.co.nz/RAF0dN9E2b**
+
+Some good EK tips here:  
+https://www.matthuisman.nz/2020/05/electrickiwi-referral-link-get-50-dollar-credit.html
+
 ```
 git clone https://github.com/matthuisman/electrickiwi.api.git
 cd electrickiwi.api
