@@ -74,7 +74,9 @@ class ElectricKiwi(object):
 
         headers = {
             'x-client': 'ek-app', 
-            'x-apiversion': '1_0',
+            'x-apiversion': '1_1',
+            'user-agent': 'Mozilla/5.0 (Linux; Android 8.1.0; MI 5 Build/OPM7.181205.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/69.0.3497.109 Mobile Safari/537.36',
+            'X-Requested-With': 'nz.co.electrickiwi.mobile.app',
         }
 
         if self._secret:
