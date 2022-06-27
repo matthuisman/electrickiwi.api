@@ -70,13 +70,14 @@ class ElectricKiwi(object):
         return at_token
 
     def request(self, endpoint, params=None, type='GET'):
-        params = params or {}
-
         headers = {
             'x-client': 'ek-app', 
-            'x-apiversion': '1_1',
-            'user-agent': 'Mozilla/5.0 (Linux; Android 8.1.0; MI 5 Build/OPM7.181205.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/69.0.3497.109 Mobile Safari/537.36',
-            'X-Requested-With': 'nz.co.electrickiwi.mobile.app',
+            'x-apiversion': '2_2',
+            'origin': 'http://localhost',
+            'referer': 'http://localhost',
+            'accept': 'application/json, text/plain, */*',
+            'user-agent': 'Mozilla/5.0 (Linux; Android 11; Mi 5 Build/RQ3A.211001.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/96.0.4664.104 Mobile Safari/537.36',
+            'x-requested-with': 'nz.co.electrickiwi.mobile.app',
         }
 
         if self._secret:
